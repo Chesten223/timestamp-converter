@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unix Timestamp Converter — Free Epoch Time Tool</title>
+<meta name="description" content="Free online Unix timestamp converter. Convert epoch to human date, date to epoch, batch convert timestamps. Supports seconds, milliseconds, timezone offsets.">
+<meta name="keywords" content="unix timestamp, epoch converter, timestamp to date, date to timestamp, epoch time, unix epoch">
+<link rel="canonical" href="https://timestamp-converter.pages.dev/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Unix Timestamp Converter — Free Epoch Time Tool">
+<meta property="og:description" content="Free online Unix timestamp converter. Convert epoch to human date, date to epoch, batch convert timestamps.">
+<meta property="og:url" content="https://timestamp-converter.pages.dev/">
+<meta property="og:site_name" content="Unix Timestamp Converter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Unix Timestamp Converter — Free Epoch Time Tool">
+<meta name="twitter:description" content="Free online Unix timestamp converter. Convert epoch to human date, date to epoch, batch convert timestamps.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Unix Timestamp Converter","url":"https://timestamp-converter.pages.dev/","description":"Free online Unix timestamp converter. Convert epoch to human date, date to epoch, batch convert timestamps with timezone support.","applicationCategory":"UtilityApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.6;min-height:100vh}
+a{color:#58a6ff;text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:900px;margin:0 auto;padding:20px}
+h1{font-size:1.8rem;text-align:center;margin:20px 0;color:#f0f6fc}
+h2{font-size:1.3rem;margin:24px 0 12px;color:#f0f6fc;border-bottom:1px solid #21262d;padding-bottom:8px}
+.card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:20px;margin-bottom:16px}
+.live-timestamp{text-align:center;padding:30px 20px}
+.live-timestamp .ts-value{font-size:2.8rem;font-weight:700;color:#58a6ff;font-family:'Courier New',monospace;cursor:pointer}
+.live-timestamp .ts-label{color:#8b949e;font-size:.9rem;margin-top:4px}
+.input-group{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.input-group input,.input-group select,.input-group textarea{flex:1;min-width:120px;background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:10px 12px;color:#c9d1d9;font-size:.95rem;outline:none}
+.input-group input:focus,.input-group select:focus,.input-group textarea:focus{border-color:#58a6ff}
+.input-group textarea{min-width:100%;resize:vertical;font-family:'Courier New',monospace}
+.btn{background:#21262d;border:1px solid #30363d;border-radius:6px;color:#c9d1d9;padding:8px 16px;cursor:pointer;font-size:.9rem;white-space:nowrap;transition:background .15s}
+.btn:hover{background:#30363d}
+.btn-primary{background:#238636;border-color:#2ea043;color:#fff}
+.btn-primary:hover{background:#2ea043}
+.output-row{display:flex;align-items:center;gap:8px;margin:6px 0}
+.output-row label{min-width:80px;color:#8b949e;font-size:.85rem}
+.output-row .val{flex:1;font-family:'Courier New',monospace;color:#f0f6fc;word-break:break-all}
+.copy-btn{background:none;border:1px solid #30363d;border-radius:4px;color:#8b949e;padding:3px 8px;cursor:pointer;font-size:.75rem}
+.copy-btn:hover{color:#f0f6fc;border-color:#58a6ff}
+.quick-btns{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.batch-table{width:100%;border-collapse:collapse;margin-top:10px}
+.batch-table th,.batch-table td{padding:8px 10px;text-align:left;border-bottom:1px solid #21262d;font-size:.85rem}
+.batch-table th{color:#8b949e;font-weight:500}
+.batch-table td{font-family:'Courier New',monospace}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:20px 0}
+.feature-card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px}
+.feature-card h3{color:#f0f6fc;font-size:1rem;margin-bottom:6px}
+.feature-card p{color:#8b949e;font-size:.85rem}
+.faq details{margin:8px 0;border:1px solid #21262d;border-radius:6px;padding:12px 16px}
+.faq summary{color:#f0f6fc;cursor:pointer;font-weight:500}
+.faq p{margin-top:8px;color:#8b949e;font-size:.9rem}
+.email-widget{margin:20px 0}
+.email-widget input{background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:10px 12px;color:#c9d1d9;font-size:.95rem;width:100%;max-width:400px;outline:none}
+.email-widget input:focus{border-color:#58a6ff}
+footer{text-align:center;padding:30px 0;color:#484f58;font-size:.8rem;border-top:1px solid #21262d;margin-top:40px}
+footer a{color:#8b949e}
+.toast{position:fixed;bottom:20px;right:20px;background:#238636;color:#fff;padding:10px 20px;border-radius:6px;font-size:.9rem;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+@media(max-width:600px){.live-timestamp .ts-value{font-size:1.8rem}.input-group{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Unix Timestamp Converter</h1>
+
+<div class="card live-timestamp">
+  <div class="ts-label">Current Unix Timestamp (click to copy)</div>
+  <div class="ts-value" id="liveTs" onclick="copyText(this.textContent)">—</div>
+  <div class="ts-label" id="liveDate"></div>
+</div>
+
+<h2>Timestamp → Date</h2>
+<div class="card">
+  <div class="input-group">
+    <input type="text" id="tsInput" placeholder="Enter epoch (seconds or milliseconds)">
+    <select id="tsTz" onchange="convertTs()">
+      <option value="UTC">UTC</option>
+      <option value="local">Local</option>
+    </select>
+    <button class="btn btn-primary" onclick="convertTs()">Convert</button>
+  </div>
+  <div class="quick-btns">
+    <button class="btn" onclick="setTs('now')">Now</button>
+    <button class="btn" onclick="setTs('+1h')">+1h</button>
+    <button class="btn" onclick="setTs('+1d')">+1d</button>
+    <button class="btn" onclick="setTs('+1w')">+1w</button>
+    <button class="btn" onclick="setTs('+1mo')">+1mo</button>
+  </div>
+  <div id="tsOutput"></div>
+</div>
+
+<h2>Date → Timestamp</h2>
+<div class="card">
+  <div class="input-group">
+    <input type="date" id="dateInput">
+    <input type="time" id="timeInput" step="1" value="00:00:00">
+    <select id="dtTz">
+      <option value="local">Local</option>
+      <option value="UTC">UTC</option>
+    </select>
+    <button class="btn btn-primary" onclick="convertDate()">Convert</button>
+  </div>
+  <div id="dtOutput"></div>
+</div>
+
+<h2>Batch Convert</h2>
+<div class="card">
+  <div class="input-group">
+    <textarea id="batchInput" rows="5" placeholder="Paste timestamps, one per line&#10;1700000000&#10;1700000000000&#10;2024-01-01T00:00:00Z"></textarea>
+  </div>
+  <button class="btn btn-primary" onclick="batchConvert()">Convert All</button>
+  <div id="batchOutput"></div>
+</div>
+
+<h2>Features</h2>
+<div class="features">
+  <div class="feature-card">
+    <h3>Live Clock</h3>
+    <p>Real-time Unix timestamp updating every second. Click to copy instantly.</p>
+  </div>
+  <div class="feature-card">
+    <h3>Auto Detect</h3>
+    <p>Automatically detects seconds vs milliseconds epoch and ISO 8601 date strings.</p>
+  </div>
+  <div class="feature-card">
+    <h3>Timezone Support</h3>
+    <p>Convert between UTC, local time, and manual UTC+/- offsets.</p>
+  </div>
+  <div class="feature-card">
+    <h3>Batch Processing</h3>
+    <p>Paste multiple timestamps at once and get a formatted table of results.</p>
+  </div>
+</div>
+
+<h2>Frequently Asked Questions</h2>
+<div class="faq card">
+  <details>
+    <summary>What is a Unix timestamp?</summary>
+    <p>A Unix timestamp (also known as Unix epoch time) is the number of seconds that have elapsed since January 1, 1970 (midnight UTC/GMT), not counting leap seconds. It is a standard way to represent a point in time across systems.</p>
+  </details>
+  <details>
+    <summary>What is the difference between seconds and milliseconds?</summary>
+    <p>Unix timestamps are traditionally in seconds (10 digits around 2024). JavaScript and many APIs use milliseconds (13 digits). This tool auto-detects: values above 1e12 are treated as milliseconds.</p>
+  </details>
+  <details>
+    <summary>Why does my timestamp show a different date in my timezone?</summary>
+    <p>A Unix timestamp represents an absolute moment in time. The displayed date changes based on timezone offset. Use the timezone selector to view the timestamp in UTC or your local timezone.</p>
+  </details>
+</div>
+
+<h2>Get Timestamp Updates &amp; Tips</h2>
+<div class="card email-widget">
+  <p style="color:#8b949e;margin-bottom:10px;font-size:.9rem">Subscribe to receive Unix timestamp tips, programming tricks, and tool updates.</p>
+  <div class="input-group">
+    <input type="email" id="emailInput" placeholder="you@example.com">
+    <button class="btn btn-primary" onclick="subscribe()">Subscribe</button>
+  </div>
+  <div id="emailMsg" style="color:#8b949e;font-size:.85rem;margin-top:6px"></div>
+</div>
+
+<h2>Related Tools</h2>
+<div class="card" style="display:flex;gap:20px;flex-wrap:wrap">
+  <a href="https://git-cheat-sheet.pages.dev/" target="_blank">Git Cheat Sheet</a>
+  <a href="https://browser-info.pages.dev/" target="_blank">Browser Info</a>
+  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank">MDN Date Reference</a>
+</div>
+
+<footer>
+  <p>&copy; 2024 Unix Timestamp Converter &mdash; Free Epoch Time Tool</p>
+  <p style="margin-top:6px"><a href="https://git-cheat-sheet.pages.dev/">Git Cheat Sheet</a> · <a href="https://browser-info.pages.dev/">Browser Info</a></p>
+</footer>
+</div>
+
+<div class="toast" id="toast">Copied!</div>
+
+<script>
+// --- Utilities ---
+function $(id){return document.getElementById(id)}
+function showToast(msg){const t=$('toast');t.textContent=msg||'Copied!';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1500)}
+function copyText(text){navigator.clipboard.writeText(text).then(()=>showToast('Copied!')).catch(()=>{})}
+function copyBtn(text){return `<button class="copy-btn" onclick="copyText('${text.replace(/'/g,"\\'")}')">Copy</button>`}
+
+function isMs(v){return v>1e12}
+function tzOffset(){return new Date().getTimezoneOffset()}
+
+function formatInTz(date,tz){
+  if(tz==='UTC')return date.toISOString();
+  return date.toLocaleString();
+}
+
+function relativeTime(date){
+  const diff=Date.now()-date.getTime();
+  const abs=Math.abs(diff);
+  const past=diff>0;
+  const s=Math.floor(abs/1000),m=Math.floor(s/60),h=Math.floor(m/60),d=Math.floor(h/24),w=Math.floor(d/7),mo=Math.floor(d/30),y=Math.floor(d/365);
+  let str;
+  if(y>0)str=y+' year'+(y>1?'s':'');
+  else if(mo>0)str=mo+' month'+(mo>1?'s':'');
+  else if(w>0)str=w+' week'+(w>1?'s':'');
+  else if(d>0)str=d+' day'+(d>1?'s':'');
+  else if(h>0)str=h+' hour'+(h>1?'s':'');
+  else if(m>0)str=m+' minute'+(m>1?'s':'');
+  else str=s+' second'+(s!==1?'s':'');
+  return past?str+' ago':'in '+str;
+}
+
+// Populate timezone offsets
+function populateTz(sel){
+  const existing=sel.querySelectorAll('option[data-offset]');
+  existing.forEach(o=>o.remove());
+  for(let i=12;i>=-12;i--){
+    const opt=document.createElement('option');
+    opt.value='offset_'+i;
+    opt.setAttribute('data-offset','');
+    const label=i>=0?'UTC+'+i:'UTC'+i;
+    opt.textContent=label;
+    sel.appendChild(opt);
+  }
+}
+populateTz($('tsTz'));
+populateTz($('dtTz'));
+
+// --- Live timestamp ---
+function updateLive(){
+  const now=Math.floor(Date.now()/1000);
+  $('liveTs').textContent=now;
+  $('liveDate').textContent=new Date().toISOString()+' (UTC)';
+}
+setInterval(updateLive,1000);
+updateLive();
+
+// --- Timestamp → Date ---
+function setTs(what){
+  let t=Math.floor(Date.now()/1000);
+  if(what==='+1h')t+=3600;
+  else if(what==='+1d')t+=86400;
+  else if(what==='+1w')t+=604800;
+  else if(what==='+1mo')t+=2592000;
+  $('tsInput').value=t;
+  convertTs();
+}
+
+function convertTs(){
+  const raw=$('tsInput').value.trim();
+  if(!raw)return;
+  const val=Number(raw);
+  if(isNaN(val)){$('tsOutput').innerHTML='<span style="color:#f85149">Invalid timestamp</span>';return}
+  const ms=isMs(val)?val:val*1000;
+  const d=new Date(ms);
+  if(isNaN(d.getTime())){$('tsOutput').innerHTML='<span style="color:#f85149">Invalid timestamp</span>';return}
+  const tz=$('tsTz').value;
+  let human,iso;
+  if(tz==='UTC'){human=d.toUTCString();iso=d.toISOString()}
+  else if(tz==='local'){human=d.toLocaleString();iso=d.toISOString()}
+  else if(tz.startsWith('offset_')){const off=parseInt(tz.split('_')[1]);const utc=d.getTime()+off*3600000;const nd=new Date(utc);human=nd.toISOString().replace('T',' ').replace('Z','')+' UTC'+(off>=0?'+':'')+off;iso=d.toISOString()}
+  const rel=relativeTime(d);
+  const sec=Math.floor(ms/1000);
+  $('tsOutput').innerHTML=`
+    <div class="output-row"><label>Human:</label><span class="val">${human}</span>${copyBtn(human)}</div>
+    <div class="output-row"><label>ISO 8601:</label><span class="val">${iso}</span>${copyBtn(iso)}</div>
+    <div class="output-row"><label>Relative:</label><span class="val">${rel}</span></div>
+    <div class="output-row"><label>Seconds:</label><span class="val">${sec}</span>${copyBtn(String(sec))}</div>
+    <div class="output-row"><label>Millis:</label><span class="val">${ms}</span>${copyBtn(String(ms))}</div>
+  `;
+}
+$('tsInput').addEventListener('keydown',e=>{if(e.key==='Enter')convertTs()});
+
+// --- Date → Timestamp ---
+function convertDate(){
+  const dv=$('dateInput').value,tv=$('timeInput').value;
+  if(!dv)return;
+  const tz=$('dtTz').value;
+  let d;
+  if(tz==='UTC'){
+    d=new Date(dv+'T'+(tv||'00:00:00')+'Z');
+  }else if(tz.startsWith('offset_')){
+    const off=parseInt(tz.split('_')[1]);
+    d=new Date(dv+'T'+(tv||'00:00:00')+'Z');
+    d=new Date(d.getTime()-off*3600000);
+  }else{
+    d=new Date(dv+'T'+(tv||'00:00:00'));
+  }
+  if(isNaN(d.getTime()))return;
+  const sec=Math.floor(d.getTime()/1000),ms=d.getTime();
+  $('dtOutput').innerHTML=`
+    <div class="output-row"><label>Seconds:</label><span class="val">${sec}</span>${copyBtn(String(sec))}</div>
+    <div class="output-row"><label>Millis:</label><span class="val">${ms}</span>${copyBtn(String(ms))}</div>
+    <div class="output-row"><label>ISO 8601:</label><span class="val">${d.toISOString()}</span>${copyBtn(d.toISOString())}</div>
+  `;
+}
+$('dateInput').addEventListener('change',convertDate);
+$('timeInput').addEventListener('change',convertDate);
+
+// Set default date to today
+(function(){const n=new Date();$('dateInput').value=n.toISOString().slice(0,10)})();
+
+// --- Batch ---
+function parseOne(line){
+  line=line.trim();
+  if(!line)return null;
+  const num=Number(line);
+  if(!isNaN(num)){
+    const ms=isMs(num)?num:num*1000;
+    const d=new Date(ms);
+    if(!isNaN(d.getTime()))return{input:line,utc:d.toISOString(),local:d.toLocaleString(),relative:relativeTime(d)};
+  }
+  const d=new Date(line);
+  if(!isNaN(d.getTime()))return{input:line,utc:d.toISOString(),local:d.toLocaleString(),relative:relativeTime(d)};
+  return{input:line,error:'Invalid'};
+}
+
+function batchConvert(){
+  const lines=$('batchInput').value.split('\n').filter(l=>l.trim());
+  if(!lines.length)return;
+  const rows=lines.map(parseOne);
+  let html='<table class="batch-table"><tr><th>Input</th><th>UTC</th><th>Local</th><th>Relative</th><th></th></tr>';
+  rows.forEach(r=>{
+    if(!r)return;
+    if(r.error)html+=`<tr><td>${r.input}</td><td colspan="3" style="color:#f85149">${r.error}</td></tr>`;
+    else html+=`<tr><td>${r.input}</td><td>${r.utc}</td><td>${r.local}</td><td>${r.relative}</td><td>${copyBtn(r.utc)}</td></tr>`;
+  });
+  html+='</table>';
+  $('batchOutput').innerHTML=html;
+}
+
+// --- Email ---
+function subscribe(){
+  const email=$('emailInput').value.trim();
+  if(!email||!email.includes('@')){$('emailMsg').textContent='Please enter a valid email address.';$('emailMsg').style.color='#f85149';return}
+  $('emailMsg').textContent='Thanks for subscribing! We\'ll send updates to '+email+'.';
+  $('emailMsg').style.color='#3fb950';
+  $('emailInput').value='';
+}
+</script>
+</body>
+</html>
